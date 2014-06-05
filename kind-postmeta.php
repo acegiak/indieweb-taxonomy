@@ -18,18 +18,18 @@ function kindbox_setup() {
 function kindbox_add_postmeta_boxes() {
 
   add_meta_box(
-    'kindbox-meta',      // Unique ID
+    'responsebox-meta',      // Unique ID
     esc_html__( 'In Response To', 'kind_taxonomy' ),    // Title
-    'kind_metabox',   // Callback function
+    'response_metabox',   // Callback function
     'post',         // Admin page (or post type)
     'normal',         // Context
     'default'         // Priority
   );
 }
 
-function kind_metabox( $object, $box ) { ?>
+function response_metabox( $object, $box ) { ?>
 
-  <?php wp_nonce_field( 'kind_metabox', 'kind_metabox_nonce' ); ?>
+  <?php wp_nonce_field( 'reponse_metabox', 'response_metabox_nonce' ); ?>
 
   <p>
     <label for="response_url"><?php _e( "URL", 'kind_taxonomy' ); ?></label>
@@ -44,7 +44,7 @@ function kind_metabox( $object, $box ) { ?>
 
 
 /* Save the meta box's post metadata. */
-function kindbox_save_post_meta( $post_id ) {
+function responsebox_save_post_meta( $post_id ) {
 
 	/*
 	 * We need to verify this came from our screen and with proper authorization,
@@ -52,12 +52,12 @@ function kindbox_save_post_meta( $post_id ) {
 	 */
 
 	// Check if our nonce is set.
-	if ( ! isset( $_POST['kind_metabox_nonce'] ) ) {
+	if ( ! isset( $_POST['response_metabox_nonce'] ) ) {
 		return;
 	}
 
 	// Verify that the nonce is valid.
-	if ( ! wp_verify_nonce( $_POST['kind_metabox_nonce'], 'kind_metabox' ) ) {
+	if ( ! wp_verify_nonce( $_POST['response_metabox_nonce'], 'response_metabox' ) ) {
 		return;
 	}
 
@@ -89,6 +89,6 @@ function kindbox_save_post_meta( $post_id ) {
 
 }
 
-add_action( 'save_post', 'kindbox_save_post_meta' );
+add_action( 'save_post', 'responsebox_save_post_meta' );
 ?>
 
