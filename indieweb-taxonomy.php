@@ -13,6 +13,8 @@
 
 require_once( plugin_dir_path( __FILE__ ) . '/WDS_Taxonomy_Radio.class.php');
 require_once( plugin_dir_path( __FILE__ ) . '/WDS_Taxonomy_Radio_Walker.php');
+// Add Kind Post Metadata
+require_once( plugin_dir_path( __FILE__ ) . '/kind-postmeta.php');
 
 
 add_action( 'init', 'register_taxonomy_kind' );
@@ -52,6 +54,7 @@ function register_taxonomy_kind() {
     register_taxonomy( 'kind', array('post'), $args );
 }
 
+// Comment this entry to revert to the standard category style picker
 $kind_mb = new WDS_Taxonomy_Radio( 'kind' );
 
 add_filter('post_link', 'kind_permalink', 10, 3);
