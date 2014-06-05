@@ -29,12 +29,13 @@ function kindbox_add_postmeta_boxes() {
 
 function response_metabox( $object, $box ) { ?>
 
-  <?php wp_nonce_field( 'reponse_metabox', 'response_metabox_nonce' ); ?>
+  <?php wp_nonce_field( 'response_metabox', 'response_metabox_nonce' ); ?>
 
   <p>
     <label for="response_url"><?php _e( "URL", 'kind_taxonomy' ); ?></label>
     <br />
     <input type="text" name="response_url" id="response_url" value="<?php echo esc_attr( get_post_meta( $object->ID, 'response_url', true ) ); ?>" size="70" />
+    <br />
     <label for="response_title"><?php _e( "Custom Title", 'kind_taxonomy' ); ?></label>
     <br />
     <input type="text" name="response_title" id="response_title" value="<?php echo esc_attr( get_post_meta( $object->ID, 'response_title', true ) ); ?>" size="70" />
@@ -83,12 +84,32 @@ function responsebox_save_post_meta( $post_id ) {
 	/* OK, its safe for us to save the data now. */
 	if( isset( $_POST[ 'response_url' ] ) ) {
         update_post_meta( $post_id, 'response_url', esc_url_raw( $_POST[ 'response_url' ] ) );
+	}
 	if( isset( $_POST[ 'response_title' ] ) ) {
-        update_post_meta( $post_id, 'response_title', esc_url_raw( $_POST[ 'response_title' ] ) );
+        update_post_meta( $post_id, 'response_title', esc_attr( $_POST[ 'response_title' ] ) );
     }
 
 }
 
 add_action( 'save_post', 'responsebox_save_post_meta' );
+
+add_action( 'add_meta_boxes', 'make_wp_editor_movable', 0 );
+	function make_wp_editor_movable() {
+		global $_wp_post_type_features;
+		if (isset($_wp_post_type_features['post']['editor']) && $_wp_post_type_features['post']['editor']) {
+			unset($_wp_post_type_features['post']['editor']);
+			add_meta_box(
+				'content_sectionid',
+				__('Content'),
+				'movable_inner_custom_box',
+				'post', 'normal', 'high'
+			);
+		}
+	}
+	function movable_inner_custom_box( $post ) {
+		the_editor($post->post_content);
+	}
+
+
 ?>
 
