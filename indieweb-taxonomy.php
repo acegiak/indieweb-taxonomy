@@ -55,7 +55,9 @@ function register_taxonomy_kind() {
 }
 
 // Comment this entry to revert to the standard category style picker
-$kind_mb = new WDS_Taxonomy_Radio( 'kind' );
+if(get_option('indieweb_taxonomy_multikind')!="true"){
+	$kind_mb = new WDS_Taxonomy_Radio( 'kind' );
+}
 
 add_filter('post_link', 'kind_permalink', 10, 3);
 add_filter('post_type_link', 'kind_permalink', 10, 3);
@@ -74,6 +76,33 @@ function kind_permalink($permalink, $post_id, $leavename) {
  
     return str_replace('%kind%', $taxonomy_slug, $permalink);
 }   
+
+
+function indieweb_taxonomy_options()
+{
+?>
+    <div class="wrap">
+        <h2>Indieweb Taxonomy Options</h2>
+        <form method="post" action="options.php">
+            <?php wp_nonce_field('update-options') ?>
+            <p><strong>Multikind:</strong><br />
+                <input type="radio" name="indieweb_taxonomy_multikind" size="45" value="false"  <?php echo get_option('indieweb_taxonomy_multikind')!="true"?'checked="checked"':''; ?>/> Disabled<br>
+				<input type="radio" name="indieweb_taxonomy_multikind" size="45" value="true" <?php echo get_option('indieweb_taxonomy_multikind')=="true"?'checked="checked"':''; ?>/> Enabled
+            </p>
+            <p><input type="submit" name="Submit" value="Store Options" /></p>
+            <input type="hidden" name="action" value="update" />
+            <input type="hidden" name="page_options" value="indieweb_taxonomy_multikind" />
+        </form>
+    </div>
+<?php
+}
+
+function add_indieweb_taxonomy_options_to_menu(){
+	add_options_page( 'Indieweb Taxonomy Options', 'Indieweb Taxonomy Options', 'manage_options', 'functions', 'indieweb_taxonomy_options');
+}
+
+add_action('admin_menu', 'add_indieweb_taxonomy_options_to_menu');
+
 
 
 ?>
