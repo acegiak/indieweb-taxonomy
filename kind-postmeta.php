@@ -50,6 +50,11 @@ function response_metabox( $object, $box ) { ?>
     <label for="response_title"><?php _e( "Custom Title", 'kind_taxonomy' ); ?></label>
     <br />
     <input type="text" name="response_title" id="response_title" value="<?php echo esc_attr( get_post_meta( $object->ID, 'response_title', true ) ); ?>" size="70" />
+	<br />
+    <label for="response_quote"><?php _e( "Citation", 'kind_taxonomy' ); ?></label>
+    <br />
+    <textarea name="response_quote" id="response_quote" cols="70"><?php echo esc_attr( get_post_meta( $object->ID, 'response_quote', true ) ); ?></textarea>
+  
   </p>
 
 <?php }
@@ -137,6 +142,9 @@ function responsebox_save_post_meta( $post_id ) {
 	}
 	if( isset( $_POST[ 'response_title' ] ) ) {
         update_post_meta( $post_id, 'response_title', esc_attr( $_POST[ 'response_title' ] ) );
+    }
+	if( isset( $_POST[ 'response_quote' ] ) ) {
+        update_post_meta( $post_id, 'response_quote', esc_attr( $_POST[ 'response_quote' ] ) );
     }
 
 }
