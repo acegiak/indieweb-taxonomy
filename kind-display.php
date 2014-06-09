@@ -3,6 +3,8 @@
 add_filter( 'the_content', 'indieweb_taxonomy_content_filter', 20 );
 
 function indieweb_taxonomy_content_filter( $content ) {
+
+
 $c = "";
    if ( is_search() ) { 
   $c .= '<div class="entry-summary p-summary entry-title p-name" itemprop="name description">';
@@ -14,7 +16,7 @@ $c = "";
 		$verbs = array();
 		$c .= '<div class="';
 
-		if(array_key_exists("contextLike",$customfields) && $customfields['contextLike'][0] == true){ 
+		has_term( 'like', 'kind' ) 
 			$c .= "p-like p-like-of ";
 			$verbs[] = "liked";
 		}
@@ -35,7 +37,7 @@ $c = "";
 		}
 		$c .= '">';
 		$contextbox = "";
-		if(array_key_exists("response_quote"$customfields) && strlen(implode($customfields["response_quote"],"")) > 0){
+		if(array_key_exists("response_quote",$customfields) && strlen(implode($customfields["response_quote"],"")) > 0){
 			$contextbox = '<blockquote class="p-content"><p>'.$contextbox . implode("</p><p>",$customfields["response_quote"]).'</p></blockquote>';
 		}
 		if(array_key_exists("response_title",$customfields)){

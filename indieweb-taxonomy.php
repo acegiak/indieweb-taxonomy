@@ -55,7 +55,6 @@ function register_taxonomy_kind() {
     register_taxonomy( 'kind', array('post'), $args );
 }
 
-// Comment this entry to revert to the standard category style picker
 if(get_option('indieweb_taxonomy_multikind')!="true"){
 	$kind_mb = new WDS_Taxonomy_Radio( 'kind' );
 }
