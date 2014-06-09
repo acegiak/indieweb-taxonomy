@@ -54,7 +54,62 @@ function register_taxonomy_kind() {
     register_taxonomy( 'kind', array('post'), $args );
 }
 
-// Comment this entry to revert to the standard category style picker
+// Sets up some starter terms...unless terms already exist 
+// or any of the existing terms are defined
+function kind_defaultterms () {
+
+    // see if we already have populated any terms
+    $kinds = get_terms( 'kind', array( 'hide_empty' => false ) );
+     // if no terms then lets add our terms
+    if( empty($kinds) ) {
+	if (!term_exists('Like', 'kind')) {
+	      wp_insert_term('Like', 'kind', 
+		array(
+   		 	  'description'=> 'Like',
+    			  'slug' => 'like',
+		     ) );
+
+            }  
+        if (!term_exists('Reply', 'kind')) {
+              wp_insert_term('Reply', 'kind',
+                array(
+                          'description'=> 'Reply',
+                          'slug' => 'reply',
+                     ) );
+
+            }
+        if (!term_exists('RSVP', 'kind')) {
+              wp_insert_term('RSVP', 'kind',
+                array(
+                          'description'=> 'RSVP for Event',
+                          'slug' => 'rsvp',
+                     ) );
+
+            }
+        if (!term_exists('Repost', 'kind')) {
+              wp_insert_term('Repost', 'kind',
+                array(
+                          'description'=> 'Repost',
+                          'slug' => 'repost',
+                     ) );
+
+            }
+        if (!term_exists('Bookmark', 'kind')) {
+              wp_insert_term('Bookmark', 'kind',
+                array(
+                          'description'=> 'Sharing a Link',
+                          'slug' => 'bookmark',
+                     ) );
+
+            }
+
+
+
+ 	}
+}
+
+add_action( 'init', 'kind_defaultterms'); 
+
 if(get_option('indieweb_taxonomy_multikind')!="true"){
 	$kind_mb = new WDS_Taxonomy_Radio( 'kind' );
 }
