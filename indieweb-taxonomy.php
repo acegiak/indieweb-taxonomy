@@ -145,9 +145,13 @@ function indieweb_taxonomy_options()
                 <input type="radio" name="indieweb_taxonomy_multikind" size="45" value="false"  <?php echo get_option('indieweb_taxonomy_multikind')!="true"?'checked="checked"':''; ?>/> Disabled<br>
 				<input type="radio" name="indieweb_taxonomy_multikind" size="45" value="true" <?php echo get_option('indieweb_taxonomy_multikind')=="true"?'checked="checked"':''; ?>/> Enabled
             </p>
+            <p><strong>Filter Content:</strong><br />
+                <input type="radio" name="indieweb_taxonomy_content_filter" size="45" value="false"  <?php echo get_option('indieweb_taxonomy_content_filter')!="true"?'checked="checked"':''; ?>/> Disabled<br>
+				<input type="radio" name="indieweb_taxonomy_content_filter" size="45" value="true" <?php echo get_option('indieweb_taxonomy_content_filter')=="true"?'checked="checked"':''; ?>/> Enabled
+            </p>
             <p><input type="submit" name="Submit" value="Store Options" /></p>
             <input type="hidden" name="action" value="update" />
-            <input type="hidden" name="page_options" value="indieweb_taxonomy_multikind" />
+            <input type="hidden" name="page_options" value="indieweb_taxonomy_multikind,indieweb_taxonomy_content_filter" />
         </form>
     </div>
 <?php

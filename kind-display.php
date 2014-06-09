@@ -1,7 +1,7 @@
 <?php
-
-add_filter( 'the_content', 'indieweb_taxonomy_content_filter', 20 );
-
+if(get_option('indieweb_taxonomy_content_filter')=="true"){
+	add_filter( 'the_content', 'indieweb_taxonomy_content_filter', 20 );
+}
 function indieweb_taxonomy_content_filter( $content ) {
 
 
