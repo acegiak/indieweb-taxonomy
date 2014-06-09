@@ -15,6 +15,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/WDS_Taxonomy_Radio.class.php');
 require_once( plugin_dir_path( __FILE__ ) . '/WDS_Taxonomy_Radio_Walker.php');
 // Add Kind Post Metadata
 require_once( plugin_dir_path( __FILE__ ) . '/kind-postmeta.php');
+require_once( plugin_dir_path( __FILE__ ) . '/kind-display.php');
 
 
 add_action( 'init', 'register_taxonomy_kind' );
