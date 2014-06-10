@@ -91,7 +91,4 @@ function kind_class( $class = '' ) {
         echo 'class="' . join( ' ', get_kind_class( $class ) ) . '"';
 }
 
-
-}
-
 ?>
