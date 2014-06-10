@@ -82,7 +82,7 @@ function showPosition(position)
 
   <p>
     <label for="geo_public"><?php _e( "Public", 'kind_taxonomy' ); ?></label>
-    <input type="checkbox" name="geo_public" id="geo_public" value="<?php echo esc_attr( get_post_meta( $object->ID, 'geo_public', true ) ); ?>" />
+    <input type="checkbox" name="geo_public" id="geo_public" value="1" />
     <br />
     <label for="geo_latitude"><?php _e( "Latitude", 'kind_taxonomy' ); ?></label>
     <input type="text" name="geo_latitude" id="geo_latitude" value="<?php echo esc_attr( get_post_meta( $object->ID, 'geo_latitude', true ) ); ?>" size="30" />
@@ -92,8 +92,8 @@ function showPosition(position)
     <br />
     <label for="geo_address"><?php _e( "Human-Readable Address (Optional)", 'kind_taxonomy' ); ?></label>
     <br />
-    <input type="text" name="geo_address" id="geo_address" value="<?php echo esc_attr( get_post_meta( $object->ID, 'geo_address', true ) ); ?>" size="70" /  
-    <span class="mapp" onmouseover="getLocation()">Retrieve Location</span>
+    <input type="text" name="geo_address" id="geo_address" value="<?php echo esc_attr( get_post_meta( $object->ID, 'geo_address', true ) ); ?>" size="70" />   
+     <button type="button" onclick="getLocation();return false;">Retrieve Location</button>
  </p>
 
 <?php }
