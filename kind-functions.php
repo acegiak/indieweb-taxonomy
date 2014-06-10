@@ -45,4 +45,53 @@ function has_kind( $kind = '', $post = null ) {
         return has_term( $kind, 'kind', $post );
 }
 
+function get_kind_class ( $class = '' ) {
+   $kinds = get_the_kinds ($id);
+   $classes = array();
+   if ( ! $kinds || is_wp_error( $kinds ) )
+            $kinds = array();
+   foreach ( $kinds as $kind ) {
+	    switch ($kind->slug) {
+		     case "like":
+                            $classes[] = 'u-like-of';
+	     	     break;
+                     case "repost":
+                            $classes[] = 'u-repost-of';
+                     break;
+                     case "reply":
+                            $classes[] = 'u-in-reply-to';
+                     break;
+     		     default:
+			    $classes[] = $kind->slug;
+		}
+
+
+                }
+   if ( ! empty( $class ) ) {
+	                if ( !is_array( $class ) )
+	                        $class = preg_split( '#\s+#', $class );
+	                $classes = array_merge( $classes, $class );
+	        } else {
+	                // Ensure that we always coerce class to being an array.
+	                $class = array();
+   	        }
+   $classes = array_map( 'esc_attr', $classes );
+ /**
+         * Filter the list of CSS kind classes for the current response URL.
+         *
+         *
+         * @param array  $classes An array of kind classes.
+         * @param string $class   A comma-separated list of additional classes added to the link.
+         */
+        return apply_filters( 'kind_class', $classes, $class );
+}
+
+function kind_class( $class = '' ) {
+        // Separates classes with a single space, collates classes
+        echo 'class="' . join( ' ', get_kind_class( $class ) ) . '"';
+}
+
+
+}
+
 ?>
