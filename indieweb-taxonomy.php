@@ -15,6 +15,8 @@ require_once( plugin_dir_path( __FILE__ ) . '/WDS_Taxonomy_Radio.class.php');
 require_once( plugin_dir_path( __FILE__ ) . '/WDS_Taxonomy_Radio_Walker.php');
 // Add Kind Post Metadata
 require_once( plugin_dir_path( __FILE__ ) . '/kind-postmeta.php');
+// Add Kind Functions
+require_once( plugin_dir_path( __FILE__ ) . '/kind-functions.php');
 
 
 add_action( 'init', 'register_taxonomy_kind' );
@@ -140,7 +142,7 @@ function indieweb_taxonomy_options()
         <h2>Indieweb Taxonomy Options</h2>
         <form method="post" action="options.php">
             <?php wp_nonce_field('update-options') ?>
-            <p><strong>Multikind:</strong><br />
+            <p><strong>Multikind:</strong> - Allow Ability to Select Multiple Kinds for a Single Post<br />
                 <input type="radio" name="indieweb_taxonomy_multikind" size="45" value="false"  <?php echo get_option('indieweb_taxonomy_multikind')!="true"?'checked="checked"':''; ?>/> Disabled<br>
 				<input type="radio" name="indieweb_taxonomy_multikind" size="45" value="true" <?php echo get_option('indieweb_taxonomy_multikind')=="true"?'checked="checked"':''; ?>/> Enabled
             </p>
@@ -153,7 +155,7 @@ function indieweb_taxonomy_options()
 }
 
 function add_indieweb_taxonomy_options_to_menu(){
-	add_options_page( 'Indieweb Taxonomy Options', 'Indieweb Taxonomy Options', 'manage_options', 'functions', 'indieweb_taxonomy_options');
+	add_options_page( 'Indieweb Taxonomy', 'Indieweb Taxonomy', 'manage_options', 'indieweb-taxonomy', 'indieweb_taxonomy_options');
 }
 
 add_action('admin_menu', 'add_indieweb_taxonomy_options_to_menu');
