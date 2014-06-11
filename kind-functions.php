@@ -45,7 +45,7 @@ function has_kind( $kind = '', $post = null ) {
         return has_term( $kind, 'kind', $post );
 }
 
-function get_kind_class ( $class = '' ) {
+function get_kind_class ( $class = '', $classtype='u' ) {
    $kinds = get_the_kinds ($id);
    $classes = array();
    if ( ! $kinds || is_wp_error( $kinds ) )
@@ -53,13 +53,13 @@ function get_kind_class ( $class = '' ) {
    foreach ( $kinds as $kind ) {
 	    switch ($kind->slug) {
 		     case "like":
-                            $classes[] = 'u-like-of';
+                            $classes[] = $classtype.'-like-of';
 	     	     break;
                      case "repost":
-                            $classes[] = 'u-repost-of';
+                            $classes[] = $classtype.'-repost-of';
                      break;
                      case "reply":
-                            $classes[] = 'u-in-reply-to';
+                            $classes[] = $classtype.'-in-reply-to';
                      break;
      		     default:
 			    $classes[] = $kind->slug;
