@@ -83,7 +83,7 @@ function get_kind_class ( $class = '' ) {
          * @param array  $classes An array of kind classes.
          * @param string $class   A comma-separated list of additional classes added to the link.
          */
-        return apply_filters( 'kind_class', $classes, $class );
+        return apply_filters( 'kind_classes', $classes, $class );
 }
 
 function kind_class( $class = '' ) {
