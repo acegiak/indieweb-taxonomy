@@ -2,26 +2,41 @@
 
 // Functions Related to Display
 
-function return_response () {
-   $response_url = get_post_meta(get_the_ID(), 'response_url', true);
-   $response_title = get_post_meta(get_the_ID(), 'response_title', true);
-   if ( ! empty($response_url))
-      {
-   return '<div class="response">' . '<h2>In response to: <a href="' . $response_url . '" class="' . implode(" ", get_kind_class()) . '">' . $response_title . '</a></h2>' . ' </div>';
-      }
- }
-
-//add_filter( 'the_content', 'test_the_content' );
-
-function test_the_content ($content)
-   {
-      return return_response() . $content;
-   }
-
    
    if(get_option('indieweb_taxonomy_content_filter')=="true"){
 	add_filter( 'the_content', 'indieweb_taxonomy_content_filter', 20 );
 }
+
+function response_display() {
+	$resp = "";
+	$response_url = get_post_meta(get_the_ID(), 'response_url', true);
+        $response_title = get_post_meta(get_the_ID(), 'response_title', true);
+        $response_quote = get_post_meta(get_the_ID(), 'response_quote', true);
+	// Don't generate the response if all the fields are empty as that means nothing is being responded to
+	if ( (!empty ($response_url)) && (!empty ($response_title)) && (!empty ($response_quote)) ) 
+	    {
+ 		if ( empty ($response_title) ) 
+			// If there is no user entered title, use the post title field instead
+		    {
+			$response_title = get_the_title(); 
+		    }
+		if ( !empty($response_url) ) 
+			// Means a response to an external source
+	    	    {
+			if ( !empty($response_quote) 
+			// Format based on having a citation
+			    {	
+		            }
+			else {	
+			// An empty citation means use a reply-context or an embed
+			     }
+		    }
+		else{  // No Response URL means use the quote/title to generate a response
+	    	    }  
+  		echo '<div class="response">' . $resp . '</div>';
+	   }
+}
+
 function indieweb_taxonomy_content_filter( $content ) {
 	$c = "";
 	   if ( is_search() ) { 
@@ -31,8 +46,7 @@ function indieweb_taxonomy_content_filter( $content ) {
 	  } else {
 		if(in_array("response_url",get_post_custom_keys(get_the_ID()))){ 
 			$customfields = get_post_custom(get_the_ID());
-			$verbs = array();
-			$c .= '<div class="'.implode(' ',get_kind_class('','p')).'">';
+			$c .= '<div class="'.implode(' ',get_kind_class('response','p')).'">';
 			$contextbox = "";
 			if(has_kind("repost")){
 				$contextbox = '<blockquote class="p-content"><p>'.$contextbox . implode("</p><p>",$customfields["response_quote"]).'</p></blockquote>';
