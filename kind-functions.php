@@ -54,12 +54,20 @@ function get_kind_class ( $class = '', $classtype='u' ) {
 	    switch ($kind->slug) {
 		     case "like":
                             $classes[] = $classtype.'-like-of';
+			    $classes[] = $kind->slug;
+
 	     	     break;
+		     case "favorite":
+			    $classes[] = $classtype.'-favorite-of';
+			    $classes[] = $kind->slug;
+		     break;
                      case "repost":
                             $classes[] = $classtype.'-repost-of';
+			    $classes[] = $kind->slug;
                      break;
                      case "reply":
                             $classes[] = $classtype.'-in-reply-to';
+			    $classes[] = $kind->slug;
                      break;
      		     default:
 			    $classes[] = $kind->slug;
@@ -90,5 +98,58 @@ function kind_class( $class = '' ) {
         // Separates classes with a single space, collates classes
         echo 'class="' . join( ' ', get_kind_class( $class ) ) . '"';
 }
+
+function get_kind_verbs ( ) {
+   $kinds = get_the_kinds ($id);
+   $verbs = array();
+   if ( ! $kinds || is_wp_error( $kinds ) )
+            $kinds = array();
+   foreach ( $kinds as $kind ) {
+            switch ($kind->slug) {
+                     case "like":
+                            $verbs[] = '<span class="like">Liked </span>';
+                     break;
+                     case "repost":
+                            $verbs[] = '<span class="repost">Reposted </span>';
+                     break;
+                     case "reply":
+                            $verbs[] = '<span class="reply">Replied </span>';
+		     break;
+		     case "favorite":
+			    $verbs[] = '<span class="favorite">Favorited </span>'; 
+		     break;
+		     case "share":
+			    $verbs[] = '<span class="share">Shared </span>';
+		     break;
+		     case "bookmark":
+                            $verbs[] = '<span class="bookmark">Bookmarked </span>';
+                     break;
+
+		     case "rsvp":
+			    $verbs[] = '<span class="rsvp">RSVPed </span>';
+		     break;
+		     case "checkin":
+			    $verbs[] = '<span class="checkin">Checked in at </span>';
+                     break;
+                     default:
+                            $verbs[] = '<span class="mention">Mentioned </span>';
+                }
+
+
+                }
+ /**
+         * Filter the list of CSS kind verbs for the current response URL.
+         *
+         *
+         * @param array  $verbs An array of kind verbs.
+         */
+        return apply_filters( 'kind_verb', $verbs);
+}
+
+function kind_verbs() {
+        // Separates verbs with an and, collates verbs
+        echo join( ' and ', get_kind_verbs() ) . '"';
+}
+
 
 ?>

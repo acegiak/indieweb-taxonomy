@@ -3,7 +3,7 @@
  * Plugin Name: IndieWeb Custom Taxonomy
  * Plugin URI: http://tiny.n9n.us
  * Description: Adds Semantic Functionality to Posts
- * Version: 0.02
+ * Version: 0.04
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * License: CC0
@@ -21,6 +21,15 @@ require_once( plugin_dir_path( __FILE__ ) . '/kind-functions.php');
 require_once( plugin_dir_path( __FILE__ ) . '/kind-view.php');
 // Add Embed Functions for Commonly Embedded Websites not Supported by Wordpress
 require_once( plugin_dir_path( __FILE__ ) . '/embeds.php');
+
+// Load Dashicons or Genericons in Front End in Order to Use Them in Response Display
+// Load a local stylesheet
+add_action( 'wp_enqueue_scripts', 'kindstyle_load' );
+function kindstyle_load() {
+//        wp_enqueue_style( 'dashicons' );
+        wp_enqueue_style( 'genericons', '//cdn.jsdelivr.net/genericons/3.0.3/genericons.css', array(), '3.0.3' );
+        wp_enqueue_style( 'kind-style', plugin_dir_url( __FILE__ ) . 'css/kind-style.css');
+  }
 
 
 add_action( 'init', 'register_taxonomy_kind' );
@@ -154,9 +163,15 @@ function indieweb_taxonomy_options()
                 <input type="radio" name="indieweb_taxonomy_content_filter" size="45" value="false"  <?php echo get_option('indieweb_taxonomy_content_filter')!="true"?'checked="checked"':''; ?>/> Disabled<br>
 				<input type="radio" name="indieweb_taxonomy_content_filter" size="45" value="true" <?php echo get_option('indieweb_taxonomy_content_filter')=="true"?'checked="checked"':''; ?>/> Enabled
             </p>
+            <p><strong>Content Filter at Top or Bottom of Content:</strong> - If the content filter is enabled, should it be at the top of bottom of the content?<br />
+                <input type="radio" name="indieweb_taxonomy_content-top" size="45" value="false"  <?php echo get_option('indieweb_taxonomy_content-top')!="true"?'checked="checked"':''; ?>/> Bottom<br>
+                <input type="radio" name="indieweb_taxonomy_content-top" size="45" value="true" <?php echo get_option('indieweb_taxonomy_content-top')=="true"?'checked="checked"':''; ?>/> Top
+            </p>
+
+
             <p><input type="submit" name="Submit" value="Store Options" /></p>
             <input type="hidden" name="action" value="update" />
-            <input type="hidden" name="page_options" value="indieweb_taxonomy_multikind,indieweb_taxonomy_content_filter" />
+            <input type="hidden" name="page_options" value="indieweb_taxonomy_multikind,indieweb_taxonomy_content_filter, indieweb_taxonomy_content-top" />
         </form>
     </div>
 <?php

@@ -4,63 +4,82 @@
 
    
    if(get_option('indieweb_taxonomy_content_filter')=="true"){
-	add_filter( 'the_content', 'indieweb_taxonomy_content_filter', 20 );
-}
+        if(get_option('indieweb_taxonomy_content-top')=="true"){
+		add_filter( 'the_content', 'content_response_top', 20 );
+	    }
+	else {
+		add_filter( 'the_content', 'content_response_bottom', 20 );
+	     }
+   }
 
-function response_display() {
+function get_response_display() {
 	$resp = "";
 	$response_url = get_post_meta(get_the_ID(), 'response_url', true);
         $response_title = get_post_meta(get_the_ID(), 'response_title', true);
         $response_quote = get_post_meta(get_the_ID(), 'response_quote', true);
-	// Don't generate the response if all the fields are empty as that means nothing is being responded to
-	if ( (!empty ($response_url)) && (!empty ($response_title)) && (!empty ($response_quote)) ) 
-	    {
- 		if ( empty ($response_title) ) 
-			// If there is no user entered title, use the post title field instead
-		    {
-			$response_title = get_the_title(); 
-		    }
-		if ( !empty($response_url) ) 
-			// Means a response to an external source
-	    	    {
-			if ( !empty($response_quote) 
-			// Format based on having a citation
-			    {	
-		            }
-			else {	
-			// An empty citation means use a reply-context or an embed
-			     }
-		    }
-		else{  // No Response URL means use the quote/title to generate a response
-	    	    }  
-  		echo '<div class="response">' . $resp . '</div>';
+ 	if ( empty ($response_title) ) 
+	    // If there is no user entered title, use the post title field instead
+	   {
+		$response_title = get_the_title(); 
 	   }
+
+	// Don't generate the response if all the fields are empty as that means nothing is being responded to
+	if (! empty($response_url)  ) 
+	    {
+		// Means a response to an external source
+		if ( !empty($response_quote) ) 
+		    {	
+		   	// Format based on having a citation
+			$resp .= '<div class="' . implode(' ',get_kind_class ( 'h-cite', 'p' )) . '">';
+			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
+			$resp .= esc_attr($response_quote);
+			$resp .= ' - ' . '<a href="' . $response_url . '">' . $response_title . '</a>';
+			$resp .= '</div>';
+			$c = '<div class="response">' . $resp . '</div>';
+		    }
+		else {	
+			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
+		    // An empty citation means use a reply-context or an embed
+			$embed_code = wp_oembed_get($response_url); 
+			if ($embed_code == false)
+				{	 
+				   $resp .= '<a href="' . $response_url . '">' . $response_title . '</a>'; 
+				}
+			else{
+				$resp .= '<br />' . $embed_code;
+				$resp .= '<br /><a class="' . implode(' ',get_kind_class ( 'h-cite empty', 'u' )) . '" href="' . $response_url . '"></a>';
+			    }
+		  	$c = '<div class="response">' . $resp . '</div>';
+		     } 
+	   }
+	elseif (! empty ($response_quote) )
+	   {
+		// No Response URL means use the quote/title to generate a response and mark up p-
+		$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
+		$resp .= '<div class="' . implode(' ',get_kind_class ( 'h-cite', 'p' )) . '"><blockquote>';
+		$resp .= esc_attr($response_quote);
+		$resp .= '</blockquote> - <em>' . $response_title . '</em></div>';
+		$c = '<div class="response">' . $resp . '</div>';
+	   }
+	return $c;
 }
 
-function indieweb_taxonomy_content_filter( $content ) {
-	$c = "";
-	   if ( is_search() ) { 
-	  $c .= '<div class="entry-summary p-summary entry-title p-name" itemprop="name description">';
-	  $c .= get_the_excerpt();
-	  $c .= '</div>';
-	  } else {
-		if(in_array("response_url",get_post_custom_keys(get_the_ID()))){ 
-			$customfields = get_post_custom(get_the_ID());
-			$c .= '<div class="'.implode(' ',get_kind_class('response','p')).'">';
-			$contextbox = "";
-			if(has_kind("repost")){
-				$contextbox = '<blockquote class="p-content"><p>'.$contextbox . implode("</p><p>",$customfields["response_quote"]).'</p></blockquote>';
-			}
-			if(count(get_the_kinds('','',''))>0){
-				$contextbox = '<p>'.$contextbox.' '.get_the_kinds_list('',' and ','').' <a class="u-url" href="'.$customfields['response_url'][0].'">@'.$customfields['response_title'][0].'</a></p>';
-			}
+function response_display() {
+	return get_response_display();
+}
 
-		$c .= $contextbox.'</div>'; }
-		$c .= '<div class="entry-content e-content p-summary" itemprop="name headline description articleBody">';
-		$c .= $content;
-		$c .= '</div>';
-	  }
-  return $c;
+function content_response_top ($content ) {
+    $c = "";
+    $c .= get_response_display();
+    $c .= $content;
+    return $c;
+}
+
+function content_response_bottom ($content ) {
+    $c = "";
+    $c .= $content;
+    $c .= get_response_display();
+    return $c;
 }
 
 ?>
