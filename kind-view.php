@@ -61,7 +61,8 @@ function get_response_display() {
 		$resp .= '</blockquote> - <em>' . $response_title . '</em></div>';
 		$c = '<div class="response">' . $resp . '</div>';
 	   }
-	return $c;
+	return apply_filters( 'response-display', $c);
+
 }
 
 function response_display() {
