@@ -12,3 +12,24 @@ Version 0.02 - Location meta box with HTML5 geolocation fill-in added. This allo
 Version 0.01 - Registers a custom taxonomy, adds in code snippets to turn the post meta box from checkboxes to radio buttons, adds code to allow a custom permalink tag if needed.
 
 Roadmap - Register embeds for commonly linked sites(Facebook, Google Plus, Instagram, etc). Refine display appearance. Add additional configuration options for customization. Add list of functions and filters to README.
+
+== Functions == 
+
+get_the_kinds($id) - Return the array of kinds for a given post. If $id is not specified, use current post.
+get_the_kinds_list($before, $sep, $after, $id) - Returns a list of kinds for a given post with custom separators...
+the_kinds($before, $sep, $after) - Echos the output of get_the_kinds_list for the current post.
+has_kind($kind, $post) - Returns true/false if kind is in post. If post is empty, then use current post
+get_kind_class( $class, $classtype ) - Returns the CSS class to be applied based on a kind. Classtype defaults to u, other option is usually p. Sets the class to the kind slug and for specially specified slugs, sets appropriate mf2 classes as well. $class specifies any additional classes to be added.
+kind_class ($class) - echoes the output of get_kind_class
+get_kind_verbs () - Returns the verbs reflected by the different kinds. Unspecified classes default to Mentioned. 
+kind_verbs - Echoes the output of get_kind_verbs
+
+
+
+== Filters ==
+
+get_the_kind - Filter get_the_kinds
+the_kinds - Filter get_the_kinds_list
+kind_classes - Filter get_kind_class
+kind_verb - Filter get_kind_verbs
+response_display - Filters the output being added to the_content
