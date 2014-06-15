@@ -40,7 +40,7 @@ function get_response_display() {
 		else {	
 			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
 		    // An empty citation means use a reply-context or an embed
-			$embed_code = wp_oembed_get($response_url); 
+			$embed_code = new_embed_get($response_url); 
 			if ($embed_code == false)
 				{	 
 				   $resp .= '<a href="' . $response_url . '">' . $response_title . '</a>'; 
@@ -48,7 +48,7 @@ function get_response_display() {
 			else{
 				$resp .= '<br />' . $embed_code;
 				$resp .= '<br /><a class="' . implode(' ',get_kind_class ( 'h-cite empty', 'u' )) . '" href="' . $response_url . '"></a>';
-			    }
+			   }
 		  	$c = '<div class="response">' . $resp . '</div>';
 		     } 
 	   }
