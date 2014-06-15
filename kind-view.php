@@ -40,7 +40,12 @@ function get_response_display() {
 		else {	
 			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
 		    // An empty citation means use a reply-context or an embed
-			$embed_code = new_embed_get($response_url); 
+			 if(get_option('indieweb_taxonomy_rich_embeds')=="true"){
+				$embed_code = new_embed_get($response_url); 
+				}
+			 else {
+				$embed_code = false;
+			      }
 			if ($embed_code == false)
 				{	 
 				   $resp .= '<a href="' . $response_url . '">' . $response_title . '</a>'; 
