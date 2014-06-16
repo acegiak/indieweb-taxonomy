@@ -41,7 +41,7 @@ function get_response_display() {
 			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
 		    // An empty citation means use a reply-context or an embed
 			 if(get_option('indieweb_taxonomy_rich_embeds')=="true"){
-				$embed_code = new_embed_get($response_url); 
+				$embed_code = new_embed_get($response_url);
 				}
 			 else {
 				$embed_code = false;

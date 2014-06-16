@@ -31,7 +31,7 @@ span.bookmark:before, a.empty:before {
 
 
 span.repost:before {
-         content: '\f408';
+         content: '\f420';
          padding:        0 5px;
          font-family:    'Genericons';
          vertical-align: middle;
