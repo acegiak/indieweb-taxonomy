@@ -45,7 +45,7 @@ function has_kind( $kind = '', $post = null ) {
         return has_term( $kind, 'kind', $post );
 }
 
-function get_kind_class ( $class = '', $classtype='u' ) {
+function get_kind_class ( $class = '', $classtype='u' , $id = false  ) {
    $kinds = get_the_kinds ($id);
    $classes = array();
    if ( ! $kinds || is_wp_error( $kinds ) )
@@ -99,7 +99,7 @@ function kind_class( $class = '' ) {
         echo 'class="' . join( ' ', get_kind_class( $class ) ) . '"';
 }
 
-function get_kind_verbs ( ) {
+function get_kind_verbs ( $id = false  ) {
    $kinds = get_the_kinds ($id);
    $verbs = array();
    if ( ! $kinds || is_wp_error( $kinds ) )
@@ -113,7 +113,7 @@ function get_kind_verbs ( ) {
                             $verbs[] = '<span class="repost">Reposted </span>';
                      break;
                      case "reply":
-                            $verbs[] = '<span class="reply">Replied </span>';
+                            $verbs[] = '<span class="reply">In Reply To </span>';
 		     break;
 		     case "favorite":
 			    $verbs[] = '<span class="favorite">Favorited </span>'; 

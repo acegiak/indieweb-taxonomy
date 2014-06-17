@@ -115,11 +115,10 @@ function make_wp_editor_movable() {
 	}
 }
 function movable_inner_custom_box( $post ) {
-	the_editor($post->post_content);
+	wp_editor($post->post_content, 'movable-content');
 }
 
 	
 	
 
 ?>
-
