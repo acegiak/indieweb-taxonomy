@@ -48,7 +48,7 @@ function get_response_display() {
 			      }
 			if ($embed_code == false)
 				{	 
-				   $resp .= '<a href="' . $response_url . '">' . $response_title . '</a>'; 
+				   $resp .= '<a class="' . implode(' ',get_kind_class ( '', 'u' )) . '"href="' . $response_url . '">' . $response_title . '</a>'; 
 				}
 			else{
 				$resp .= '<br />' . $embed_code;
