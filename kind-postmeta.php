@@ -101,7 +101,7 @@ function responsebox_save_post_meta( $post_id ) {
 
 add_action( 'save_post', 'responsebox_save_post_meta' );
 
-add_action( 'add_meta_boxes', 'make_wp_editor_movable', 0 );
+// add_action( 'add_meta_boxes', 'make_wp_editor_movable', 0 );
 function make_wp_editor_movable() {
 	global $_wp_post_type_features;
 	if (isset($_wp_post_type_features['post']['editor']) && $_wp_post_type_features['post']['editor']) {
@@ -114,6 +114,7 @@ function make_wp_editor_movable() {
 		);
 	}
 }
+
 function movable_inner_custom_box( $post ) {
 	wp_editor($post->post_content, 'movable-content');
 }
