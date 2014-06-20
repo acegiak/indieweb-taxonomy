@@ -49,7 +49,7 @@ function new_embed_get ($url) {
       		elseif (strpos($url,'https://plus.google.com/') !== false) {          
 	       		$embed = get_embed_gplus ($url);
 			}
-      		elseif (strpos($lurl,'https://instagram.com/') !== false) {
+      		elseif (strpos($url,'https://instagram.com/') !== false) {
        	       		$embed = get_embed_instagram ($url);
 			}
 	}

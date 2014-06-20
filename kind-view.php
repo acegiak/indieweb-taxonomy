@@ -14,6 +14,7 @@
 
 function get_response_display() {
 	$resp = "";
+	$c = "";
 	$response_url = get_post_meta(get_the_ID(), 'response_url', true);
         $response_title = get_post_meta(get_the_ID(), 'response_title', true);
         $response_quote = get_post_meta(get_the_ID(), 'response_quote', true);
