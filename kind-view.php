@@ -2,51 +2,91 @@
 
 // Functions Related to Display
 
-function return_response () {
-   $response_url = get_post_meta(get_the_ID(), 'response_url', true);
-   $response_title = get_post_meta(get_the_ID(), 'response_title', true);
-   if ( ! empty($response_url))
-      {
-   return '<div class="response">' . '<h2>In response to: <a href="' . $response_url . '" class="' . implode(" ", get_kind_class()) . '">' . $response_title . '</a></h2>' . ' </div>';
-      }
- }
 
-//add_filter( 'the_content', 'test_the_content' );
-
-function test_the_content ($content)
-   {
-      return return_response() . $content;
+   if(get_option('indieweb_taxonomy_content_filter')=="true"){
+        if(get_option('indieweb_taxonomy_content-top')=="true"){
+		add_filter( 'the_content', 'content_response_top', 20 );
+	    }
+	else {
+		add_filter( 'the_content', 'content_response_bottom', 20 );
+	     }
    }
 
-   
-   if(get_option('indieweb_taxonomy_content_filter')=="true"){
-	add_filter( 'the_content', 'indieweb_taxonomy_content_filter', 20 );
-}
-function indieweb_taxonomy_content_filter( $content ) {
+function get_response_display() {
+	$resp = "";
 	$c = "";
-	   if ( is_search() ) { 
-	  $c .= '<div class="entry-summary p-summary entry-title p-name" itemprop="name description">';
-	  $c .= get_the_excerpt();
-	  $c .= '</div>';
-	  } else {
-		if(in_array("response_url",get_post_custom_keys(get_the_ID()))){ 
-			$customfields = get_post_custom(get_the_ID());
-			$verbs = array();
-			$c .= '<div class="'.implode(' ',get_kind_class('','p')).'">';
-			$contextbox = "";
-			if(has_kind("repost")){
-				$contextbox = '<blockquote class="p-content"><p>'.$contextbox . implode("</p><p>",$customfields["response_quote"]).'</p></blockquote>';
-			}
-			if(count(get_the_kinds('','',''))>0){
-				$contextbox = '<p>'.$contextbox.' '.get_the_kinds_list('',' and ','').' <a class="u-url" href="'.$customfields['response_url'][0].'">@'.$customfields['response_title'][0].'</a></p>';
-			}
+	$response_url = get_post_meta(get_the_ID(), 'response_url', true);
+        $response_title = get_post_meta(get_the_ID(), 'response_title', true);
+        $response_quote = get_post_meta(get_the_ID(), 'response_quote', true);
+ 	if ( empty ($response_title) )
+	    // If there is no user entered title, use the post title field instead
+	   {
+		$response_title = get_the_title();
+	   }
 
-		$c .= $contextbox.'</div>'; }
-		$c .= '<div class="entry-content e-content p-summary" itemprop="name headline description articleBody">';
-		$c .= $content;
-		$c .= '</div>';
-	  }
-  return $c;
+	// Don't generate the response if all the fields are empty as that means nothing is being responded to
+	if (! empty($response_url)  )
+	    {
+		// Means a response to an external source
+		if ( !empty($response_quote) )
+		    {
+		   	// Format based on having a citation
+			$resp .= '<div class="' . implode(' ',get_kind_class ( 'h-cite', 'p' )) . '">';
+			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
+			$resp .= esc_attr($response_quote);
+			$resp .= ' - ' . '<a href="' . $response_url . '">' . $response_title . '</a>';
+			$resp .= '</div>';
+			$c = '<div class="response">' . $resp . '</div>';
+		    }
+		else {
+			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
+		    // An empty citation means use a reply-context or an embed
+			 if(get_option('indieweb_taxonomy_rich_embeds')=="true"){
+				$embed_code = new_embed_get($response_url);
+				}
+			 else {
+				$embed_code = false;
+			      }
+			if ($embed_code == false)
+				{
+				   $resp .= '<a class="' . implode(' ',get_kind_class ( '', 'u' )) . '"href="' . $response_url . '">' . $response_title . '</a>';
+				}
+			else{
+				$resp .= '<br />' . $embed_code;
+				$resp .= '<br /><a class="' . implode(' ',get_kind_class ( 'h-cite empty', 'u' )) . '" href="' . $response_url . '"></a>';
+			   }
+		  	$c = '<div class="response">' . $resp . '</div>';
+		     }
+	   }
+	elseif (! empty ($response_quote) )
+	   {
+		// No Response URL means use the quote/title to generate a response and mark up p-
+		$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
+		$resp .= '<div class="' . implode(' ',get_kind_class ( 'h-cite', 'p' )) . '"><blockquote>';
+		$resp .= esc_attr($response_quote);
+		$resp .= '</blockquote> - <em>' . $response_title . '</em></div>';
+		$c = '<div class="response">' . $resp . '</div>';
+	   }
+	return apply_filters( 'response-display', $c);
+
+}
+
+function response_display() {
+	return get_response_display();
+}
+
+function content_response_top ($content ) {
+    $c = "";
+    $c .= get_response_display();
+    $c .= $content;
+    return $c;
+}
+
+function content_response_bottom ($content ) {
+    $c = "";
+    $c .= $content;
+    $c .= get_response_display();
+    return $c;
 }
 
 ?>
