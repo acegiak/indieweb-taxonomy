@@ -33,8 +33,8 @@ function get_response_display() {
 		   	// Format based on having a citation
 			$resp .= '<div class="' . implode(' ',get_kind_class ( 'h-cite', 'p' )) . '">';
 			$resp .= '<strong>' . implode(' and ', get_kind_verbs()) . '</strong>';
-			$resp .= $response_quote;
-			$resp .= ' - ' . '<a href="' . $response_url . '">' . $response_title . '</a>';
+			$resp .= '<blockquote class="p-content">'.$response_quote.'</blockquote>';
+			$resp .= ' - ' . '<a class="u-url" href="' . $response_url . '">' . $response_title . '</a>';
 			$resp .= '</div>';
 			$c = '<div class="response">' . $resp . '</div>';
 		    }
