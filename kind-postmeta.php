@@ -94,7 +94,7 @@ function responsebox_save_post_meta( $post_id ) {
         update_post_meta( $post_id, 'response_title', esc_attr( $_POST[ 'response_title' ] ) );
     }
 	if( isset( $_POST[ 'response_quote' ] ) ) {
-        update_post_meta( $post_id, 'response_quote', esc_attr( $_POST[ 'response_quote' ] ) );
+        update_post_meta( $post_id, 'response_quote', wp_kses_post( (string) $_POST[ 'response_quote' ] ) );
     }
 
 }
